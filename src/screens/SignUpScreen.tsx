@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TextInput, TouchableOpacity, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Image, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Hook for navigation
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-type LoginScreenProps = {
+type SignUpScreenProps = {
   navigation: StackNavigationProp<any, any>;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ navigation,setIsLoggedIn }) => {
+const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
+  const [userName, setUserName] = useState('');
   const [gmail, setGmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isPasswordVisible, setPasswordVisible] = useState(false);
-  const navigationGoback = useNavigation(); // Navigation hook to go back
+  const [isPasswordAgainVisible, setPasswordAgainVisible] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
+  const navigationGoback = useNavigation();
 
-  const handleLogin = () => {
+  const handleSignUp = () => {
     // Implement your login logic here
-    setIsLoggedIn(true)
+    navigation.navigate('Commitment')
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,21 +30,22 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation,setIsLoggedIn }) =
         <Icon name={"chevron-left"} size={30} color="grey" style={styles.backIcon} />
       </TouchableOpacity>
 
-      {/* Logo */}
-      <Image
-        style={styles.logoStyle}
-        source={require('.././assets/shopClosing.png')}
-      />
-
       {/* Welcome Text */}
-      <Text style={styles.textHeader}>ShopStore mừng bạn quay lại</Text>
+      <Text style={styles.textHeader}>ShopStore Xin chào! Hãy đăng kí để bắt đầu</Text>
 
       {/* Input Fields */}
       <TextInput
         style={styles.inputStyle}
+        onChangeText={setUserName}
+        value={userName}
+        placeholder="Tên đăng nhập"
+        keyboardType="default"
+      />
+      <TextInput
+        style={styles.inputStyle}
         onChangeText={setGmail}
         value={gmail}
-        placeholder="Tên đăng nhập"
+        placeholder="Email"
         keyboardType="email-address"
       />
       <View style={styles.passwordContainer}>
@@ -59,16 +61,27 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation,setIsLoggedIn }) =
         </TouchableOpacity>
       </View>
 
-      {/* Forgot Password */}
-      <Text style={styles.forgotPassword}>Quên mật khẩu</Text>
+
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.inputStyle}
+          onChangeText={setPasswordAgain}
+          value={passwordAgain}
+          placeholder="Nhập lại mật khẩu"
+          secureTextEntry={!isPasswordAgainVisible}
+        />
+        <TouchableOpacity onPress={() => { setPasswordAgainVisible(!isPasswordAgainVisible) }} style={styles.iconStyle}>
+          <Icon name={isPasswordVisible ? "eye-off" : "eye"} size={24} color="grey" />
+        </TouchableOpacity>
+      </View>
 
       {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Đăng nhập</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
+        <Text style={styles.loginButtonText}>Đăng ký</Text>
       </TouchableOpacity>
 
       {/* Social Login Options */}
-      <Text style={styles.orText}>Hoặc đăng nhập với</Text>
+      <Text style={styles.orText}>Hoặc đăng ký với</Text>
       <View style={styles.socialContainer}>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name={"facebook"} size={30} color="blue" />
@@ -84,10 +97,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation,setIsLoggedIn }) =
       {/* Sign Up */}
       <View style={styles.createAccountDiv}>
         <Text style={styles.signupText}>
-          Bạn chưa có tài khoản?
+          Bạn đã có tài khoản?
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.signupLink}> Đăng ký</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.signupLink}> Đăng nhập</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -117,11 +130,12 @@ const styles = StyleSheet.create({
   logoStyle: {
     width: 100,
     height: 100,
+    marginBottom: 20,
   },
   textHeader: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 60,
+    marginBottom: 20,
     color: '#333',
   },
   inputStyle: {
@@ -197,4 +211,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen;
+export default SignUpScreen;

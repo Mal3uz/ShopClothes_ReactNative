@@ -14,6 +14,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         title="View Products"
         onPress={() => navigation.navigate('Product')}
       />
+
+      <Button
+        title="View Location"
+        onPress={() => navigation.navigate('Location')}
+      />
+
+      <Button
+        title="Back to login"
+        onPress={() => navigation.navigate('Login')}
+      />
     </View>
   );
 };
